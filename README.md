@@ -13,6 +13,7 @@ Container image is based off of Ubuntu:latest minimal with the most current DEB 
 ```
 docker run -it --name nxfilter \
    -p 53:53/udp \
+   -p 19004:19004/udp \
    -p 80:80 \
    -p 443:443 \
    -p 19002-19004:19002-19004 \
@@ -28,6 +29,7 @@ docker run -dt --name nxfilter \
   -v nxfdb:/nxfilter/db \
   -v nxflog:/nxfilter/log \
   -p 53:53/udp \
+  -p 19004:19004/udp \
   -p 80:80 \
   -p 443:443 \
   -p 19002-19004:19002-19004 \
@@ -61,6 +63,7 @@ services:
       - nxfdb:/nxfilter/db
     ports:
       - 53:53/udp
+      - 19004:19004/udp
       - 80:80
       - 443:443
       - 19002-19004:19002-19004

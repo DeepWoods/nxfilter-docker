@@ -17,6 +17,6 @@ RUN apt -y update && apt -y upgrade \
   && rm -rf /var/lib/apt && rm -rf /var/lib/dpkg && rm -rf /var/lib/cache && rm -rf /var/lib/log \
   && echo "$(curl https://nxfilter.org/curver.php)" > /nxfilter/version.txt
 
-EXPOSE 53/udp 80 443 19002 19003 19004
+EXPOSE 53/udp 19004/udp 80 443 19002 19003 19004
 
 CMD ["/nxfilter/bin/startup.sh"]
