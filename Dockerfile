@@ -1,8 +1,8 @@
 FROM ubuntu:latest
 
 LABEL maintainer="Rob Asher"
-LABEL version="4.6.5.3"
-LABEL release-date="2023-02-09"
+LABEL version="4.6.5.4"
+LABEL release-date="2023-03-06"
 LABEL source="https://github.com/DeepWoods/nxfilter-docker"
 
 ENV TZ=${TZ:-Etc/UTC}
