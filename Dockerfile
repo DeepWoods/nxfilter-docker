@@ -1,15 +1,15 @@
 FROM ubuntu:latest
 
 LABEL maintainer="Rob Asher"
-LABEL version="4.7.1.9"
-LABEL release-date="2025-05-27"
+LABEL version="4.7.2.2"
+LABEL release-date="2025-06-26"
 LABEL source="https://github.com/DeepWoods/nxfilter-docker"
 
 ENV TZ=${TZ:-Etc/UTC}
 
 RUN apt -y update && apt -y upgrade \
   && apt -y install --no-install-recommends dnsutils iputils-ping tzdata curl openjdk-11-jre-headless \
-  && curl $(printf ' -O http://pub.nxfilter.org/nxfilter-%s.deb' $(curl https://nxfilter.org/curver.php)) \
+  && curl $(printf ' -O http://nxfilter.org/pub/nxfilter-%s.deb' $(curl https://nxfilter.org/curver.php)) \
   && apt -y install --no-install-recommends ./$(printf 'nxfilter-%s.deb' $(curl https://nxfilter.org/curver.php)) \
   && apt -y clean autoclean \
   && apt -y autoremove \
