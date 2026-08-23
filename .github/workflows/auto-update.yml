@@ -1,0 +1,48 @@
+name: Auto Update Dockerfile
+
+on:
+  repository_dispatch:
+    types: [website_updated]
+
+permissions:
+  contents: write
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Latest Version and Update Dockerfile
+        run: |
+          # Fetch clean version string from the source endpoint
+          NEW_VERSION=$(curl -sSL "https://nxfilter.org/curver.php" | xargs)
+          CURRENT_DATE=$(date +'%Y-%m-%d')
+          
+          # Sanity check: Ensure curl returned a valid-looking string
+          if [[ -z "$NEW_VERSION" || ! "$NEW_VERSION" =~ ^[0-9] ]]; then
+            echo "Error: Failed to fetch valid version string from nxfilter.org"
+            exit 1
+          fi
+          
+          echo "Latest available version found: $NEW_VERSION"
+
+          # Update the relevant lines in the Dockerfile
+          sed -i "s|LABEL release-date=\".*\"|LABEL release-date=\"$CURRENT_DATE\"|g" Dockerfile
+          sed -i "s|LABEL version=\".*\"|LABEL version=\"$NEW_VERSION\"|g" Dockerfile
+          sed -i "s|ARG VERSION=.*|ARG VERSION=$NEW_VERSION|g" Dockerfile
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # If ARG VERSION or LABEL version changed, commit and push.
+          # If only the date would change but version is identical, skip to prevent false builds.
+          if git diff Dockerfile | grep -E "^\+[[:space:]]*(ARG VERSION|LABEL version)"; then
+            echo "New version detected. Committing changes..."
+            git add Dockerfile
+            git commit -m "chore: automated bump to v$NEW_VERSION ($CURRENT_DATE)"
+            git push origin main
+          else
+            echo "Fetched version matches repository version. No update needed."
+          fi
