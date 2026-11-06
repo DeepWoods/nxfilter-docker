@@ -12,7 +12,7 @@ ENV TZ=${TZ:-Etc/UTC}
 RUN apt -y update && apt -y upgrade \
   && apt -y install --no-install-recommends dnsutils iputils-ping tzdata curl openjdk-11-jre-headless \
   # 2. Download using build argument
-  && curl -L -O "http://nxfilter.org/pub/nxfilter-${VERSION}.deb" \
+  && curl -fL -O "https://pub.nxfilter.org/nxfilter-${VERSION}.deb" \
   # 3. Install the package
   && apt -y install --no-install-recommends "./nxfilter-${VERSION}.deb" \
   # 4. Clean up unnecessary files and decrease image size

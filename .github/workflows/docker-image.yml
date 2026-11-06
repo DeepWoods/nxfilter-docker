@@ -6,6 +6,7 @@ on:
       - "Dockerfile"
     branches:
       - "main"
+  workflow_dispatch:
 
 jobs:
   docker:
